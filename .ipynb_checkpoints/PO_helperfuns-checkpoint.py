@@ -58,15 +58,15 @@ def NextGen(uvec,xvec,rvec,K,pc,beta,deltas = [0, 0], eta=1):
     
     
     K_x = K + deltas[0]; pc_x = pc + deltas[1];
-    u = sum(uvec)
-    x = sum(xvec)
-    r1 = rvec[0]
-    r2 = rvec[1]
+    u = sum(np.array(uvec))
+    x = sum(np.array(xvec))
+    r1 = np.array(rvec[0])
+    r2 = np.array(rvec[1])
     
-    p1 = uvec[0] + xvec[0] 
-    p2 = uvec[1] + xvec[1] 
+    p1 = np.array(uvec[0] + xvec[0]) 
+    p2 = np.array(uvec[1] + xvec[1])
     
-    if np.array(p1).size==1: # p1 is a scalar
+    if np.array(p1).size==1: # p1,p2, r1, r2 are scalars
         denom = p1 + p2
         psi_1 = p1/denom if denom>0 else 0
         psi_2 = p2/denom if denom>0 else 0
