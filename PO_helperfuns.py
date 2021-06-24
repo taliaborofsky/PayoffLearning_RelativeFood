@@ -121,6 +121,30 @@ def NextGen(uvec,xvec,rvec,K,pc,beta,deltas = [0, 0], eta=1):
     return(uvec, xvec, rvec,W)
 
 
+def PredictEquilibrium_NoPref(K,pc,beta):
+    def Equilibrium_beta0(K,pc):
+        u1 = (K+pc)/(1+K+pc)
+        return(u1)
+    def Equilibrium_betapos(K,pc,beta):
+        b = 2 + (K+pc)*(2+beta)
+        a = -2*beta*(K+pc)
+        c = -2*(K+pc)
+        soln = (-b + np.sqrt(b**2 - 4*a*c))/(2*a)
+        return(soln)
+    if np.array(beta).size>1:
+        ans = np.zeros(beta.shape)
+        if np.array(K).size>1:
+            ans[beta>0]= Equilibrium_betapos(K[beta>0],pc[beta>0],beta[beta>0])
+            ans[beta==0]=Equilibrium_beta0(K[beta==0],pc[beta==0])
+        else:
+            ans[beta>0]= Equilibrium_betapos(K,pc,beta[beta>0])
+            ans[beta==0]=Equilibrium_beta0(K,pc)
+    else:
+        ans = Equilibrium_betapos(K,pc,beta) if beta > 0 else Equilibrium_beta0(K,pc)
+    return(ans)
+
+
+
 # Check equilibrium is internally stable with local stability analysis
 """ Test Internal Stability of an equilibrium
 Jac_UR_evals finds the Jacobian and then solves for the eigenvalues.
